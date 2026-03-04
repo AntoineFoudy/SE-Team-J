@@ -27,13 +27,14 @@ public class BookStoreApp {
         while(!connected) {
             connected = getConnection();
         }
-        System.out.println("");
+        System.out.println("getConnection Method ran successfully");
     
     }
     
     /*
     Gets the connection
-    Since this is only a prototype with no dedicated server it will also add all the schema and tables
+    Since this is only a prototype with no dedicated server it will also add the schema and all the 
+    tables and data for the books and a test user account
     */
     private boolean getConnection() {
         String schema = "TeamJBookStore";
@@ -69,8 +70,12 @@ public class BookStoreApp {
                                      bookID int AUTO_INCREMENT,
                                      name varchar(255) NOT NULL,
                                      isbn int NOT NULL UNIQUE,
+                                     author varchar(255) NOT NULL,
+                                     category varchar(255) NOT NULL,
                                      description varchar(255) NOT NULL,
+                                     type varchar(255) NOT NULL,
                                      price DOUBLE NOT NULL,
+                                     stock int,
                                      PRIMARY KEY (bookID)
                                      )
                                      """;
@@ -90,7 +95,7 @@ public class BookStoreApp {
                                        )
                                        """;
             String createTableTransaction = """
-                                            CREATE TABLE IF NOT EXISTS transaction (
+                                            CREATE TABLE IF NOT EXISTS transactions (
                                             transactionID int AUTO_INCREMENT,
                                             userID int,
                                             bookIDs varchar(255),
@@ -108,6 +113,77 @@ public class BookStoreApp {
                 statement.executeUpdate(createTableReview);
                 statement.executeUpdate(createTableTransaction);
             }
+            
+            String insertDataUsers = """
+                                    INSERT IGNORE INTO users VALUES (
+                                    1,
+                                    "Test",
+                                    "test@gmail.com",
+                                    "password123")
+                                    """;
+            
+            String insertDataBook1 = """
+                                    INSERT IGNORE INTO book VALUES (
+                                    1,
+                                    "Harry Potter and the Philosipher's Stone",
+                                    97814,
+                                    "J.K. Rowling",
+                                    "Fiction",
+                                    "A story about a orphan wizard named Harry Potter",
+                                    "normal",
+                                    10,
+                                    5
+                                    )                                    
+                                    """;
+            String insertDataBook2 = """
+                                    INSERT IGNORE INTO book VALUES (
+                                    2,
+                                    "Murder on the Orient Express",
+                                    97800,
+                                    "Agatha Christie",
+                                    "Fiction",
+                                    "Someone kills someone on a train",
+                                    "normal",
+                                    14.58,
+                                    0
+                                    )
+                                    """;
+            String insertDataBook3 = """
+                                    INSERT IGNORE INTO book VALUES (
+                                    3,
+                                    "The Snowball",
+                                    07475,
+                                    "Alice Schroeder",
+                                    "Biography",
+                                    "The biography of Warren Buffet",
+                                    "School",
+                                    14.58,
+                                    10
+                                    )
+                                    """;
+            String insertDataBook4 = """
+                                    INSERT IGNORE INTO book VALUES (
+                                    4,
+                                    "$100M Offers: How to Make Offers So Good People Feel Stupid Saying No",
+                                    094273,
+                                    "Alex Hormozi",
+                                    "Business",
+                                    "How to create offer so that people won't say no",
+                                    "School",
+                                    8.99,
+                                    3
+                                    )
+                                    """;
+            
+            try(Statement statement = con.createStatement()) {
+                statement.executeUpdate(insertDataUsers);
+                statement.executeUpdate(insertDataBook1);
+                statement.executeUpdate(insertDataBook2);
+                statement.executeUpdate(insertDataBook3);
+                statement.executeUpdate(insertDataBook4);
+            }
+            
+            System.out.println("Added the data");
             
             return true;
             
