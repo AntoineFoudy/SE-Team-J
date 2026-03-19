@@ -112,6 +112,31 @@ public class DBClass {
         // Error
         return -1;
     }
+    
+    // Add to basket
+    public boolean addToBasket(int userId, int bookId) {
+        boolean success = false;
+        
+        String insertBook = """
+                            INSERT INTO basket (userID, bookID)
+                            VALUES (
+                            ?,
+                            ?
+                            )
+                            """;
+        try(PreparedStatement pstatementCreate = con.prepareStatement(insertBook)){
+            pstatementCreate.setInt(1, userId);
+            pstatementCreate.setInt(2, bookId);
+            
+            pstatementCreate.executeUpdate();
+            
+            success = true;
+        }
+        catch(SQLException ex) {
+            System.out.println("SQLException: " + ex);            
+        }
+        return success;
+    }
         
 
 }
