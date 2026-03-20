@@ -5,6 +5,7 @@
 package bookstoreapp;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,7 +18,7 @@ public class DBClass {
     
     private String url = "jdbc:mysql://localhost:3306/TeamJBookStore";
     private String user = "root";
-    private String password = "password";
+    private String password = "antantant";
     
     
     
@@ -136,6 +137,86 @@ public class DBClass {
             System.out.println("SQLException: " + ex);            
         }
         return success;
+    }
+    
+    public boolean emptyBasketForUser(int userId) {
+        boolean delete = false;
+        
+        String deleteUserBasket = """
+                                  DELETE FROM basket 
+                                  WHERE userID = ?
+                                  """;
+        
+        try(PreparedStatement pstatementDelete = con.prepareStatement(deleteUserBasket)) {
+            pstatementDelete.setInt(1, userId);
+            
+            pstatementDelete.executeUpdate();
+            
+            delete = true;
+        }
+        catch(SQLException ex) {
+            System.out.println("SQLException:" + ex);
+        }
+        
+        return delete;
+    }
+    
+    public ArrayList<ArrayList<String>> getUserBasket(int userId) {
+        ArrayList<ArrayList<String>> bookData = new ArrayList<>();
+        
+        String getUserBasket = """
+                               SELECT bookID FROM user
+                               WHERE userID = ?
+                               """;
+        
+        try(PreparedStatement pstatement = con.prepareStatement(getUserBasket)) {
+            pstatement.setInt(1, userId);
+            
+            try(ResultSet rs = pstatement.executeQuery()) {
+               if(rs.next()) {
+                    bookData.add(getBookData(rs.getInt("bookID")));
+                }
+            }
+            
+        }
+        catch(SQLException ex) {
+            System.out.println("SQLException" + ex);
+        }
+        
+        return bookData;
+    }
+    
+    private ArrayList<String> getBookData(int bookId) {
+        ArrayList<String> getBookData = new ArrayList<>();
+        
+        String getBookDataByID = """
+                                 SELECT * FROM books
+                                 WHERE bookID = ?
+                                 """;
+        
+        try(PreparedStatement pstatement = con.prepareStatement(getBookDataByID)) {
+            pstatement.setInt(1, bookId);
+            
+            try(ResultSet book = pstatement.executeQuery()) {
+                if(book.next()) {
+                    getBookData.add(book.getString("bookID"));
+                    getBookData.add(book.getString("name"));
+                    getBookData.add(book.getString("isbn"));
+                    getBookData.add(book.getString("author"));
+                    getBookData.add(book.getString("category"));
+                    getBookData.add(book.getString("description"));
+                    getBookData.add(book.getString("type"));
+                    getBookData.add(book.getString("price"));
+                    getBookData.add(book.getString("stock"));
+                }
+            }
+            
+        }
+        catch(SQLException ex) {
+            System.out.println("SQLException" + ex);
+        }
+        
+        return getBookData;
     }
         
 
