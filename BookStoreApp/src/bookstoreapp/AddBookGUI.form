@@ -30,8 +30,10 @@
                   <Component id="book2_radioBttn" min="-2" max="-2" attributes="0"/>
                   <Component id="book3_radioBttn" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="delete_bttn" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                       <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                           <Component id="confirm_bttn" min="-2" pref="75" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="basket_bttn" min="-2" pref="75" max="-2" attributes="0"/>
@@ -61,7 +63,9 @@
                   <Component id="confirm_bttn" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="basket_bttn" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="86" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="delete_bttn" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="45" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -104,6 +108,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Basket"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="basket_bttnActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="delete_bttn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Delete all Books In Basket"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="delete_bttnActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

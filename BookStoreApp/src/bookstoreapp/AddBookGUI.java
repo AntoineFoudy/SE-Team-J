@@ -4,6 +4,8 @@
  */
 package bookstoreapp;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author afoud
@@ -41,6 +43,7 @@ public class AddBookGUI extends javax.swing.JFrame {
         confirm_bttn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         basket_bttn = new javax.swing.JButton();
+        delete_bttn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,6 +61,10 @@ public class AddBookGUI extends javax.swing.JFrame {
         jLabel1.setText("Place holder of the search book use case, to allow for the prototype use cases to be tested");
 
         basket_bttn.setText("Basket");
+        basket_bttn.addActionListener(this::basket_bttnActionPerformed);
+
+        delete_bttn.setText("Delete all Books In Basket");
+        delete_bttn.addActionListener(this::delete_bttnActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -70,8 +77,10 @@ public class AddBookGUI extends javax.swing.JFrame {
                     .addComponent(book2_radioBttn)
                     .addComponent(book3_radioBttn)
                     .addComponent(jLabel1)
+                    .addComponent(delete_bttn)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(layout.createSequentialGroup()
+                            .addGap(45, 45, 45)
                             .addComponent(confirm_bttn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(basket_bttn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -95,7 +104,9 @@ public class AddBookGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(confirm_bttn)
                     .addComponent(basket_bttn))
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(delete_bttn)
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         pack();
@@ -118,6 +129,18 @@ public class AddBookGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_confirm_bttnActionPerformed
 
+    // Delete the Books from the Users Basket
+    private void delete_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_bttnActionPerformed
+       if(!db.emptyBasketForUser(userId)) {
+           JOptionPane.showMessageDialog(null, "Something went wrong when trying to delete the books from you basket");
+       }
+    }//GEN-LAST:event_delete_bttnActionPerformed
+
+    private void basket_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_basket_bttnActionPerformed
+        BasketGUI bgui = new BasketGUI(userId);
+        bgui.setVisible(true);
+    }//GEN-LAST:event_basket_bttnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton basket_bttn;
     private javax.swing.JRadioButton book1_radioBttn;
@@ -125,6 +148,7 @@ public class AddBookGUI extends javax.swing.JFrame {
     private javax.swing.JRadioButton book3_radioBttn;
     private javax.swing.JRadioButton book4_radioBttn;
     private javax.swing.JButton confirm_bttn;
+    private javax.swing.JButton delete_bttn;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

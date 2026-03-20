@@ -27,6 +27,7 @@ public class BasketGUI extends javax.swing.JFrame {
         db = new DBClass();
         this.userId = userId;
         basket = new ArrayList<>();
+        getBasketDetail();
     }
 
     /**

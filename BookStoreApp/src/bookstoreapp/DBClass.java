@@ -18,7 +18,7 @@ public class DBClass {
     
     private String url = "jdbc:mysql://localhost:3306/TeamJBookStore";
     private String user = "root";
-    private String password = "antantant";
+    private String password = "password";
     
     
     
@@ -165,7 +165,7 @@ public class DBClass {
         ArrayList<ArrayList<String>> bookData = new ArrayList<>();
         
         String getUserBasket = """
-                               SELECT bookID FROM user
+                               SELECT bookID FROM basket
                                WHERE userID = ?
                                """;
         
@@ -173,7 +173,7 @@ public class DBClass {
             pstatement.setInt(1, userId);
             
             try(ResultSet rs = pstatement.executeQuery()) {
-               if(rs.next()) {
+                while(rs.next()) {
                     bookData.add(getBookData(rs.getInt("bookID")));
                 }
             }
@@ -190,7 +190,7 @@ public class DBClass {
         ArrayList<String> getBookData = new ArrayList<>();
         
         String getBookDataByID = """
-                                 SELECT * FROM books
+                                 SELECT * FROM book
                                  WHERE bookID = ?
                                  """;
         
