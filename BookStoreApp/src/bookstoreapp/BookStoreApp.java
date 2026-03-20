@@ -16,6 +16,7 @@ public class BookStoreApp {
     // JDBC dependent Variables
     private Connection con;
     private boolean connected;
+    private LoginGUI lgui;
     
     public static void main(String[] args) {
         BookStoreApp app = new BookStoreApp();
@@ -28,6 +29,8 @@ public class BookStoreApp {
             connected = getConnection();
         }
         System.out.println("getConnection Method ran successfully");
+        // If everything was successful open gui
+        openGUI();
     
     }
     
@@ -191,6 +194,11 @@ public class BookStoreApp {
             System.out.println("Error: " + ex.getMessage());
             return false;
         }
+    }
+    
+    private void openGUI() {
+        this.lgui = new LoginGUI();
+        lgui.setVisible(true);
     }
     
     
