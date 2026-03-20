@@ -18,6 +18,8 @@ public class BasketGUI extends javax.swing.JFrame {
     
     private int userId;
     private ArrayList<ArrayList<String>> basket;
+    private double price = 0;
+    private boolean rentForSem = false;
 
     /**
      * Creates new form BasketGUI
@@ -128,9 +130,39 @@ public class BasketGUI extends javax.swing.JFrame {
     // Gets all the Books in the users Basket and displays them and the price and if it is avaible to rent for the semester
     private void getBasketDetail() {
         this.basket = db.getUserBasket(userId);
+        boolean typeNormal = false;
+        boolean typeSchool = false;
         
         for(ArrayList<String> b : basket) {
-            basket_txtArea.append("\n" + b);
+            basket_txtArea.append("\n Name: " + b.get(1) +
+                    ", ISBN: " + b.get(2) +
+                    ", Author: " + b.get(3) +
+                    ", Category: " + b.get(4) +
+                    ", Description: " + b.get(5) +
+                    ", Type: " + b.get(6) +
+                    ", Price: " + b.get(7));
+            
+            this.price = price + Double.parseDouble(b.get(7));
+            
+            if("normal".equals(b.get(6))) {
+                typeNormal = true;
+            }
+            else if("School".equals(b.get(6))) {
+                typeSchool = true;
+            }
+        }
+        
+        price_txtField.setText(Double.toString(price));
+        
+        if(!typeNormal && typeSchool) {
+            rentForSem = true;
+        }
+        
+        if(rentForSem) {
+            rentForSem_txtField.setText("Yes");
+        }
+        else {
+            rentForSem_txtField.setText("No");
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
