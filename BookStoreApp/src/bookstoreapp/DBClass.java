@@ -6,6 +6,7 @@ package bookstoreapp;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -217,6 +218,91 @@ public class DBClass {
         }
         
         return getBookData;
+    }
+    
+    public boolean recordTransaction(int userId, ArrayList<Integer> bookIds, double price, String type) {
+        boolean success = false;
+        
+        String recordTransaction = """
+                                   INSERT INTO transactions (userID, bookIDs, price, type)
+                                   VALUES (
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?
+                                   )
+                                   """;
+        
+        try(PreparedStatement pstatment = con.prepareStatement(recordTransaction)) {
+            
+            String bookIdsToString = bookIds.stream().map(String::valueOf).collect(Collectors.joining(","));
+            
+            pstatment.setInt(1, userId);
+            pstatment.setString(2, bookIdsToString);
+            pstatment.setDouble(3, price);
+            pstatment.setString(4, type);
+            
+            pstatment.executeUpdate();
+            
+            success = true;
+        }
+        catch(SQLException ex) {
+            System.out.println("SQLException" + ex);
+        }
+        
+        return success;
+    }
+    
+    public boolean checkStock(int bookId, int amountOfBookNeeded) {
+        boolean enoughStock = false;
+        
+        String checkStock = """
+                            SELECT stock FROM book
+                            WHERE bookID = ?
+                            """;
+        
+        try(PreparedStatement pstatment = con.prepareStatement(checkStock)) {
+            
+            pstatment.setInt(1, bookId);
+            
+ 
+            try(ResultSet rs = pstatment.executeQuery()) {
+               if (rs.next()) {
+                   if(rs.getInt("stock") >= amountOfBookNeeded) {
+                       enoughStock = true;
+                   }
+               }
+            }
+        }
+        catch(SQLException ex) {
+            System.out.println("SQLException" + ex);
+        }
+        
+        return enoughStock;
+    }
+    
+    public boolean updateStock(int bookId, int usedStock) {
+        boolean successful = false;
+        
+        String updateStock = """
+                             UPDATE book
+                             SET stock = stock - ?
+                             WHERE bookID = ?
+                             """;
+        
+        try(PreparedStatement pstatment = con.prepareStatement(updateStock)) {
+            pstatment.setInt(1, usedStock);
+            pstatment.setInt(2, bookId);
+            
+            pstatment.execute();
+            
+            successful = true;
+        }
+        catch(SQLException ex) {
+            System.out.println("SQLException" + ex);
+        }
+        
+        return successful;
     }
         
 

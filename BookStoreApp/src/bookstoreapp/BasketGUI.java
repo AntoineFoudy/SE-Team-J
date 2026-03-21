@@ -5,6 +5,9 @@
 package bookstoreapp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,6 +21,7 @@ public class BasketGUI extends javax.swing.JFrame {
     
     private int userId;
     private ArrayList<ArrayList<String>> basket;
+    private ArrayList<Integer> bookIds;
     private double price = 0;
     private boolean rentForSem = false;
 
@@ -29,6 +33,7 @@ public class BasketGUI extends javax.swing.JFrame {
         db = new DBClass();
         this.userId = userId;
         basket = new ArrayList<>();
+        bookIds = new ArrayList<>();
         getBasketDetail();
     }
 
@@ -63,6 +68,7 @@ public class BasketGUI extends javax.swing.JFrame {
         rent_bttn.setText("Rent");
 
         buy_bttn.setText("Buy");
+        buy_bttn.addActionListener(this::buy_bttnActionPerformed);
 
         rentForSem_bttn.setText("Rent for Semester");
 
@@ -126,6 +132,16 @@ public class BasketGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void buy_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buy_bttnActionPerformed
+        if(checkStock()) {
+            PurchaseGUI pgui = new PurchaseGUI(userId, price, bookIds);
+            pgui.setVisible(true);
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Not enough stock available");
+        }
+    }//GEN-LAST:event_buy_bttnActionPerformed
     
     // Gets all the Books in the users Basket and displays them and the price and if it is avaible to rent for the semester
     private void getBasketDetail() {
@@ -150,6 +166,8 @@ public class BasketGUI extends javax.swing.JFrame {
             else if("School".equals(b.get(6))) {
                 typeSchool = true;
             }
+            
+            this.bookIds.add(Integer.valueOf(b.get(0)));
         }
         
         price_txtField.setText(Double.toString(price));
@@ -164,6 +182,23 @@ public class BasketGUI extends javax.swing.JFrame {
         else {
             rentForSem_txtField.setText("No");
         }
+    }
+    
+    private boolean checkStock() {
+        boolean enoughStock = true;
+        Map<Integer, Integer> amountForEachBook = new HashMap<>();
+        
+        for(Integer b : bookIds) {
+            amountForEachBook.put(b, amountForEachBook.getOrDefault(b, 0) + 1);
+        }
+        
+        for(Map.Entry<Integer, Integer> book : amountForEachBook.entrySet()) {
+            if(!db.checkStock(book.getKey(), book.getValue())) {
+                enoughStock = false;
+            }
+        }
+        
+        return enoughStock;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea basket_txtArea;
