@@ -5,6 +5,7 @@
 package bookstoreapp;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -253,12 +254,14 @@ public class DBClass {
         return success;
     }
     
-    public boolean recordTransaction(int userId, ArrayList<Integer> bookIds, String type) {
+    public boolean recordTransaction(int userId, ArrayList<Integer> bookIds, String type, LocalDate dueDate) {
         boolean success = false;
+        Date dueDateSQL = Date.valueOf(dueDate);
         
         String recordTransaction = """
-                                   INSERT INTO transactions (userID, bookIDs, type)
+                                   INSERT INTO transactions (userID, bookIDs, type, dueDate)
                                    VALUES (
+                                   ?,
                                    ?,
                                    ?,
                                    ?
@@ -272,6 +275,7 @@ public class DBClass {
             pstatment.setInt(1, userId);
             pstatment.setString(2, bookIdsToString);
             pstatment.setString(3, type);
+            pstatment.setDate(4, dueDateSQL);
             
             pstatment.executeUpdate();
             

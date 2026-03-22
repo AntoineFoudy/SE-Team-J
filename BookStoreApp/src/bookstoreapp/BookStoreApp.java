@@ -100,10 +100,11 @@ public class BookStoreApp {
             String createTableTransaction = """
                                             CREATE TABLE IF NOT EXISTS transactions (
                                             transactionID int AUTO_INCREMENT,
-                                            userID int,
-                                            bookIDs varchar(255),
-                                            price DOUBLE NOT NULL,
-                                            type varchar(255),
+                                            userID int NOT NULL,
+                                            bookIDs varchar(255) NOT NULL,
+                                            price DOUBLE DEFAULT(0) NOT NULL,
+                                            type varchar(255) NOT NULL,
+                                            dueDate DATE,
                                             PRIMARY KEY (transactionID),
                                             FOREIGN KEY (userID) REFERENCES users(userID)
                                             )

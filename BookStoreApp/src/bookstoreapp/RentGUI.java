@@ -24,6 +24,7 @@ public class RentGUI extends javax.swing.JFrame {
     private String rentType;
     private int normalRentPeriod = 2; // 2 weeks from present day
     private int semesterRentPeriod = 4; // 4 months from present day ( 3 months for lectures, 1 month of exams )
+    private LocalDate dueDate;
     private String displayedDueDate;
 
     /**
@@ -44,14 +45,14 @@ public class RentGUI extends javax.swing.JFrame {
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
         if("Rent".equals(rentType)) {
-            LocalDate dueDate = now.plusWeeks(normalRentPeriod);
+            this.dueDate = now.plusWeeks(normalRentPeriod);
             
             this.displayedDueDate = formatter.format(dueDate);
             
             due_txtField.setText(displayedDueDate);
         }
         else {
-            LocalDate dueDate = now.plusMonths(semesterRentPeriod);
+            this.dueDate = now.plusMonths(semesterRentPeriod);
             
             this.displayedDueDate = formatter.format(dueDate);
             
@@ -119,7 +120,7 @@ public class RentGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(db.recordTransaction(userId, bookIds, rentType) && db.emptyBasketForUser(userId)){
+        if(db.recordTransaction(userId, bookIds, rentType, dueDate) && db.emptyBasketForUser(userId)){
             for (Integer b : bookIds) {
                     db.updateStock(b, 1);
                 }
