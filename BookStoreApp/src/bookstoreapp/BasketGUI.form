@@ -112,6 +112,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Rent"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rent_bttnActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="buy_bttn">
       <Properties>
@@ -125,6 +128,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Rent for Semester"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rentForSem_bttnActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="price_txtField">
     </Component>

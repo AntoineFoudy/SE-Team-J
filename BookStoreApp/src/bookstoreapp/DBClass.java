@@ -253,6 +253,37 @@ public class DBClass {
         return success;
     }
     
+    public boolean recordTransaction(int userId, ArrayList<Integer> bookIds, String type) {
+        boolean success = false;
+        
+        String recordTransaction = """
+                                   INSERT INTO transactions (userID, bookIDs, type)
+                                   VALUES (
+                                   ?,
+                                   ?,
+                                   ?
+                                   )
+                                   """;
+        
+        try(PreparedStatement pstatment = con.prepareStatement(recordTransaction)) {
+            
+            String bookIdsToString = bookIds.stream().map(String::valueOf).collect(Collectors.joining(","));
+            
+            pstatment.setInt(1, userId);
+            pstatment.setString(2, bookIdsToString);
+            pstatment.setString(3, type);
+            
+            pstatment.executeUpdate();
+            
+            success = true;
+        }
+        catch(SQLException ex) {
+            System.out.println("SQLException" + ex);
+        }
+        
+        return success;
+    }
+    
     public boolean checkStock(int bookId, int amountOfBookNeeded) {
         boolean enoughStock = false;
         

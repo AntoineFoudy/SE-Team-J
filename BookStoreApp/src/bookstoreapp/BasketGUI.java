@@ -66,11 +66,13 @@ public class BasketGUI extends javax.swing.JFrame {
         jScrollPane1.setViewportView(basket_txtArea);
 
         rent_bttn.setText("Rent");
+        rent_bttn.addActionListener(this::rent_bttnActionPerformed);
 
         buy_bttn.setText("Buy");
         buy_bttn.addActionListener(this::buy_bttnActionPerformed);
 
         rentForSem_bttn.setText("Rent for Semester");
+        rentForSem_bttn.addActionListener(this::rentForSem_bttnActionPerformed);
 
         jLabel2.setText("Price");
 
@@ -142,6 +144,26 @@ public class BasketGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Not enough stock available");
         }
     }//GEN-LAST:event_buy_bttnActionPerformed
+
+    private void rent_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rent_bttnActionPerformed
+        if(checkStock()) {
+            RentGUI rgui = new RentGUI(userId, bookIds, "Rent");
+            rgui.setVisible(true);
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Not enough stock available");
+        }
+    }//GEN-LAST:event_rent_bttnActionPerformed
+
+    private void rentForSem_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rentForSem_bttnActionPerformed
+        if(checkStock()) {
+            RentGUI rgui = new RentGUI(userId, bookIds, "Rent for Semester");
+            rgui.setVisible(true);
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Not enough stock available");
+        }
+    }//GEN-LAST:event_rentForSem_bttnActionPerformed
     
     // Gets all the Books in the users Basket and displays them and the price and if it is avaible to rent for the semester
     private void getBasketDetail() {
