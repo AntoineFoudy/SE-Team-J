@@ -26,7 +26,7 @@ public class PurchaseGUI extends javax.swing.JFrame {
     private double price;
     private ArrayList<Integer> bookIds;
 
-    int cardNumber;
+    Long cardNumber;
     int cardCvv;
     YearMonth yearMonth;
 
@@ -63,6 +63,7 @@ public class PurchaseGUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        back_bttn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,17 +76,21 @@ public class PurchaseGUI extends javax.swing.JFrame {
 
         jLabel3.setText("CVV");
 
+        back_bttn.setText("Back");
+        back_bttn.addActionListener(this::back_bttnActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(back_bttn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(confirm_bttn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cNumber_txtField)
                             .addGroup(layout.createSequentialGroup()
@@ -121,7 +126,9 @@ public class PurchaseGUI extends javax.swing.JFrame {
                     .addComponent(date_txtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cvv_txtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(53, 53, 53)
-                .addComponent(confirm_bttn)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(confirm_bttn)
+                    .addComponent(back_bttn))
                 .addGap(57, 57, 57))
         );
 
@@ -131,13 +138,21 @@ public class PurchaseGUI extends javax.swing.JFrame {
     private void confirm_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirm_bttnActionPerformed
         // Get all the data to pase to the payment provider
         try {
-            this.cardNumber = Integer.parseInt(cNumber_txtField.getText());
+            // Check if the card number and cvv passed are the correct length
+            if(cNumber_txtField.getText().length() == 16
+                    && cvv_txtField.getText().length() == 3) {
+               this.cardNumber = Long.parseLong(cNumber_txtField.getText()); 
+               this.cardCvv = Integer.parseInt(cvv_txtField.getText());
+            }
+            else {
+                throw new NumberFormatException("The amount of numbers you have entered is incorrect");
+            }
 
             // Format the correct date as would be seen on the card
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
             this.yearMonth = YearMonth.parse(date_txtField.getText(), formatter);
 
-            this.cardCvv = Integer.parseInt(cvv_txtField.getText());
+            
 
             // Run the payment check and the database updates
             if (payment.takePayment(cardNumber, yearMonth, cardCvv)
@@ -149,12 +164,15 @@ public class PurchaseGUI extends javax.swing.JFrame {
                 }
                 // Show confirm message to the user
                 JOptionPane.showMessageDialog(null, "Payment Successful");
+                
+                AddBookGUI abGUI = new AddBookGUI(userId);
+                abGUI.setVisible(true);
+                setVisible(false);
             } 
             else {
                 // If anything goes wrong show error message
                 JOptionPane.showMessageDialog(null, "Something went wrong");
             }
-
         } 
         catch(DateTimeParseException | NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Please make sure that your card details are correct " + e);
@@ -162,9 +180,17 @@ public class PurchaseGUI extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_confirm_bttnActionPerformed
+    
+    // Go back to the basket
+    private void back_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_bttnActionPerformed
+        BasketGUI bgui = new BasketGUI(userId);
+        bgui.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_back_bttnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back_bttn;
     private javax.swing.JTextField cNumber_txtField;
     private javax.swing.JButton confirm_bttn;
     private javax.swing.JTextField cvv_txtField;

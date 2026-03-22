@@ -20,7 +20,7 @@ public class Payment {
         
     }
     
-    public boolean takePayment(int cardNumber, YearMonth yearMonth, int cardCvv) {
+    public boolean takePayment(Long cardNumber, YearMonth yearMonth, int cardCvv) {
         // No payment serivce for the prototype. Using boolean to simulate taking payment 
         boolean paymentSuccessfull = true;
         return paymentSuccessfull;

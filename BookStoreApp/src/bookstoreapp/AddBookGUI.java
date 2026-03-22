@@ -44,6 +44,7 @@ public class AddBookGUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         basket_bttn = new javax.swing.JButton();
         delete_bttn = new javax.swing.JButton();
+        logout_bttn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,6 +67,9 @@ public class AddBookGUI extends javax.swing.JFrame {
         delete_bttn.setText("Delete all Books In Basket");
         delete_bttn.addActionListener(this::delete_bttnActionPerformed);
 
+        logout_bttn.setText("Log out");
+        logout_bttn.addActionListener(this::logout_bttnActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -77,8 +81,11 @@ public class AddBookGUI extends javax.swing.JFrame {
                     .addComponent(book2_radioBttn)
                     .addComponent(book3_radioBttn)
                     .addComponent(jLabel1)
-                    .addComponent(delete_bttn)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(delete_bttn)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(logout_bttn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(45, 45, 45)
                             .addComponent(confirm_bttn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -105,7 +112,9 @@ public class AddBookGUI extends javax.swing.JFrame {
                     .addComponent(confirm_bttn)
                     .addComponent(basket_bttn))
                 .addGap(18, 18, 18)
-                .addComponent(delete_bttn)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(delete_bttn)
+                    .addComponent(logout_bttn))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
 
@@ -136,10 +145,19 @@ public class AddBookGUI extends javax.swing.JFrame {
        }
     }//GEN-LAST:event_delete_bttnActionPerformed
 
+    // Navigates the user to the BasketGUI
     private void basket_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_basket_bttnActionPerformed
         BasketGUI bgui = new BasketGUI(userId);
         bgui.setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_basket_bttnActionPerformed
+
+    // Logs out the user and display the LoginGUI    
+    private void logout_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_bttnActionPerformed
+        LoginGUI lgui = new LoginGUI();
+        lgui.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_logout_bttnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton basket_bttn;
@@ -150,5 +168,6 @@ public class AddBookGUI extends javax.swing.JFrame {
     private javax.swing.JButton confirm_bttn;
     private javax.swing.JButton delete_bttn;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton logout_bttn;
     // End of variables declaration//GEN-END:variables
 }

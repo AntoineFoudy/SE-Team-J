@@ -141,6 +141,7 @@ public class DBClass {
         return success;
     }
     
+    // Empty every book in the Users basket
     public boolean emptyBasketForUser(int userId) {
         boolean delete = false;
         
@@ -188,6 +189,7 @@ public class DBClass {
         return bookData;
     }
     
+    // Get all the data for a spesific book, returned in a ArrayList
     private ArrayList<String> getBookData(int bookId) {
         ArrayList<String> getBookData = new ArrayList<>();
         
@@ -199,6 +201,7 @@ public class DBClass {
         try(PreparedStatement pstatement = con.prepareStatement(getBookDataByID)) {
             pstatement.setInt(1, bookId);
             
+            // Adds all the data
             try(ResultSet book = pstatement.executeQuery()) {
                 if(book.next()) {
                     getBookData.add(book.getString("bookID"));
@@ -221,6 +224,7 @@ public class DBClass {
         return getBookData;
     }
     
+    // Records the Transactions, this spesific method is only used when buying books
     public boolean recordTransaction(int userId, ArrayList<Integer> bookIds, double price, String type) {
         boolean success = false;
         
@@ -254,6 +258,7 @@ public class DBClass {
         return success;
     }
     
+    // Records the Transactions, this spesific overloaded method is only used when renting books
     public boolean recordTransaction(int userId, ArrayList<Integer> bookIds, String type, LocalDate dueDate) {
         boolean success = false;
         Date dueDateSQL = Date.valueOf(dueDate);
@@ -288,6 +293,7 @@ public class DBClass {
         return success;
     }
     
+    // Check if the stock of a spesific book is enough for the users wants
     public boolean checkStock(int bookId, int amountOfBookNeeded) {
         boolean enoughStock = false;
         
@@ -316,6 +322,7 @@ public class DBClass {
         return enoughStock;
     }
     
+    // Update the stock of a specific book against the amount that was bought/rented
     public boolean updateStock(int bookId, int usedStock) {
         boolean successful = false;
         

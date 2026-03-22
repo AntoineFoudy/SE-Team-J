@@ -127,6 +127,7 @@ public class LoginGUI extends javax.swing.JFrame {
                 System.out.println(userId);
                 AddBookGUI abGUI = new AddBookGUI(userId);
                 abGUI.setVisible(true);
+                setVisible(false);
             }
         }
         catch(Exception e) {

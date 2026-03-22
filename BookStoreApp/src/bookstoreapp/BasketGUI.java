@@ -56,6 +56,8 @@ public class BasketGUI extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         rentForSem_txtField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        back_bttn = new javax.swing.JButton();
+        logout_bttn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,6 +80,12 @@ public class BasketGUI extends javax.swing.JFrame {
 
         jLabel3.setText("Available to rent for Semester");
 
+        back_bttn.setText("Back");
+        back_bttn.addActionListener(this::back_bttnActionPerformed);
+
+        logout_bttn.setText("Log out");
+        logout_bttn.addActionListener(this::logout_bttnActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,8 +98,15 @@ public class BasketGUI extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rentForSem_bttn)
-                            .addComponent(rent_bttn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(rentForSem_bttn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(logout_bttn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(back_bttn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(rent_bttn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,42 +143,65 @@ public class BasketGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rent_bttn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rentForSem_bttn)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rentForSem_bttn)
+                    .addComponent(back_bttn)
+                    .addComponent(logout_bttn))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Opens the PurchaseGUI and passes the correct info
     private void buy_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buy_bttnActionPerformed
         if(checkStock()) {
             PurchaseGUI pgui = new PurchaseGUI(userId, price, bookIds);
             pgui.setVisible(true);
+            setVisible(false);
         }
         else {
             JOptionPane.showMessageDialog(null, "Not enough stock available");
         }
     }//GEN-LAST:event_buy_bttnActionPerformed
 
+    // Opens the RentGUI and passes the correct info
     private void rent_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rent_bttnActionPerformed
         if(checkStock()) {
             RentGUI rgui = new RentGUI(userId, bookIds, "Rent");
             rgui.setVisible(true);
+            setVisible(false);
         }
         else {
             JOptionPane.showMessageDialog(null, "Not enough stock available");
         }
     }//GEN-LAST:event_rent_bttnActionPerformed
 
+    // Opens the RentGUI and passes the correct info
     private void rentForSem_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rentForSem_bttnActionPerformed
         if(checkStock()) {
             RentGUI rgui = new RentGUI(userId, bookIds, "Rent for Semester");
             rgui.setVisible(true);
+            setVisible(false);
         }
         else {
             JOptionPane.showMessageDialog(null, "Not enough stock available");
         }
     }//GEN-LAST:event_rentForSem_bttnActionPerformed
+
+    // Brings the user back to the AddBookGUI
+    private void back_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_bttnActionPerformed
+        AddBookGUI abGUI = new AddBookGUI(userId);
+        abGUI.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_back_bttnActionPerformed
+
+    // Logs out the user and brings them back to the LoginGUI
+    private void logout_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_bttnActionPerformed
+        LoginGUI lgui = new LoginGUI();
+        lgui.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_logout_bttnActionPerformed
     
     // Gets all the Books in the users Basket and displays them and the price and if it is avaible to rent for the semester
     private void getBasketDetail() {
@@ -171,6 +209,8 @@ public class BasketGUI extends javax.swing.JFrame {
         boolean typeNormal = false;
         boolean typeSchool = false;
         
+        // Interacts with each Book(ArrayList) in the ArrayList to parse the correct information and present it to the user
+        // or store it for a later date
         for(ArrayList<String> b : basket) {
             basket_txtArea.append("\n Name: " + b.get(1) +
                     ", ISBN: " + b.get(2) +
@@ -182,6 +222,7 @@ public class BasketGUI extends javax.swing.JFrame {
             
             this.price = price + Double.parseDouble(b.get(7));
             
+            // Figures out if the basket can be rented for a semester
             if("normal".equals(b.get(6))) {
                 typeNormal = true;
             }
@@ -189,6 +230,7 @@ public class BasketGUI extends javax.swing.JFrame {
                 typeSchool = true;
             }
             
+            // Adds the book id to a new ArrayList which will be past to the Purchase or Rent Class
             this.bookIds.add(Integer.valueOf(b.get(0)));
         }
         
@@ -206,14 +248,17 @@ public class BasketGUI extends javax.swing.JFrame {
         }
     }
     
+    // Passes each book and the amount required to the checkStock method in the DBClass
     private boolean checkStock() {
         boolean enoughStock = true;
+        // Using a HashMap for key value pairs
         Map<Integer, Integer> amountForEachBook = new HashMap<>();
         
         for(Integer b : bookIds) {
             amountForEachBook.put(b, amountForEachBook.getOrDefault(b, 0) + 1);
         }
         
+        // If even just one of the books the user has selected the program will display that there is not enough stock
         for(Map.Entry<Integer, Integer> book : amountForEachBook.entrySet()) {
             if(!db.checkStock(book.getKey(), book.getValue())) {
                 enoughStock = false;
@@ -223,12 +268,14 @@ public class BasketGUI extends javax.swing.JFrame {
         return enoughStock;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back_bttn;
     private javax.swing.JTextArea basket_txtArea;
     private javax.swing.JButton buy_bttn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton logout_bttn;
     private javax.swing.JTextField price_txtField;
     private javax.swing.JButton rentForSem_bttn;
     private javax.swing.JTextField rentForSem_txtField;

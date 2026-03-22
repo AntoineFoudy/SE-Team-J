@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
  *
  * @author afoud
  */
+
+// This class will be used for both the Rent and Rent for Semester as they operate the same way, just utilizes different information
 public class RentGUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RentGUI.class.getName());
@@ -73,7 +75,8 @@ public class RentGUI extends javax.swing.JFrame {
         rentType_label = new javax.swing.JLabel();
         due_txtField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        confirm_bttn = new javax.swing.JButton();
+        back_bttn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,26 +84,28 @@ public class RentGUI extends javax.swing.JFrame {
 
         jLabel2.setText("Due Date");
 
-        jButton1.setText("Confirm");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        confirm_bttn.setText("Confirm");
+        confirm_bttn.addActionListener(this::confirm_bttnActionPerformed);
+
+        back_bttn.setText("Back");
+        back_bttn.addActionListener(this::back_bttnActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(back_bttn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rentType_label, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(due_txtField, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(267, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
+                .addComponent(confirm_bttn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,25 +117,43 @@ public class RentGUI extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(due_txtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 148, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(confirm_bttn)
+                    .addComponent(back_bttn))
                 .addGap(61, 61, 61))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    // Runs when the user confirms the return date
+    // Records the transaction including the return date and empties the user's basket and update the stock of the books rented
+    private void confirm_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirm_bttnActionPerformed
         if(db.recordTransaction(userId, bookIds, rentType, dueDate) && db.emptyBasketForUser(userId)){
             for (Integer b : bookIds) {
                     db.updateStock(b, 1);
                 }
             JOptionPane.showMessageDialog(null, "Rent Successful \n Due back on the: " + displayedDueDate);
+            AddBookGUI abGUI = new AddBookGUI(userId);
+            abGUI.setVisible(true);
+            setVisible(false);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+        else {
+            JOptionPane.showMessageDialog(null, "Something when wrong");
+        }
+    }//GEN-LAST:event_confirm_bttnActionPerformed
+
+    // Go back to the basket
+    private void back_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_bttnActionPerformed
+        BasketGUI bgui = new BasketGUI(userId);
+        bgui.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_back_bttnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back_bttn;
+    private javax.swing.JButton confirm_bttn;
     private javax.swing.JTextField due_txtField;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel rentType_label;
     // End of variables declaration//GEN-END:variables
