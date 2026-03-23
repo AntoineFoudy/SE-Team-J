@@ -77,7 +77,7 @@ public class BookStoreApp {
                                      category varchar(255) NOT NULL,
                                      description varchar(255) NOT NULL,
                                      type varchar(255) NOT NULL,
-                                     price DOUBLE NOT NULL,
+                                     price DOUBLE(9,2) NOT NULL,
                                      stock int,
                                      PRIMARY KEY (bookID)
                                      )
