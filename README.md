@@ -1,5 +1,5 @@
 To Set up and run this system you need to :
-1. Have a IDE for Java
+1. Have a IDE for Java, JDK 25
 2. Have MySQL server and for it to be running
 3. Change the password in BookStoreApp.java ( Line 46 ) and in DBClass.java ( Line 23 )
 
