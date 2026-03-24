@@ -4,6 +4,7 @@
  */
 package bookstoreapp;
 
+import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -23,7 +24,7 @@ public class PurchaseGUI extends javax.swing.JFrame {
     private DBClass db;
 
     private int userId;
-    private double price;
+    private BigDecimal BDprice;
     private ArrayList<Integer> bookIds;
 
     Long cardNumber;
@@ -33,16 +34,16 @@ public class PurchaseGUI extends javax.swing.JFrame {
     /**
      * Creates new form PurchaseGUI
      */
-    public PurchaseGUI(int userId, double price, ArrayList<Integer> bookIds) {
+    public PurchaseGUI(int userId, BigDecimal price, ArrayList<Integer> bookIds) {
         initComponents();
 
         this.userId = userId;
-        this.price = price;
+        this.BDprice = price;
         this.bookIds = bookIds;
 
-        price_txtField.setText(Double.toString(price));
+        price_txtField.setText(BDprice.toString());
 
-        this.payment = new Payment(price);
+        this.payment = new Payment(BDprice.doubleValue());
         this.db = new DBClass();
     }
 
@@ -141,7 +142,7 @@ public class PurchaseGUI extends javax.swing.JFrame {
             // Check if the card number and cvv passed are the correct length
             if(cNumber_txtField.getText().length() == 16
                     && cvv_txtField.getText().length() == 3) {
-               this.cardNumber = Long.parseLong(cNumber_txtField.getText()); 
+               this.cardNumber = Long.valueOf(cNumber_txtField.getText()); 
                this.cardCvv = Integer.parseInt(cvv_txtField.getText());
             }
             else {
@@ -156,7 +157,7 @@ public class PurchaseGUI extends javax.swing.JFrame {
 
             // Run the payment check and the database updates
             if (payment.takePayment(cardNumber, yearMonth, cardCvv)
-                    && db.recordTransaction(userId, bookIds, price, "Purchase")
+                    && db.recordTransaction(userId, bookIds, BDprice, "Purchase")
                     && db.emptyBasketForUser(userId)) {
                 // If successful update the stock
                 for (Integer b : bookIds) {

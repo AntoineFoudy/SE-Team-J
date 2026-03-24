@@ -4,6 +4,7 @@
  */
 package bookstoreapp;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -225,7 +226,7 @@ public class DBClass {
     }
     
     // Records the Transactions, this spesific method is only used when buying books
-    public boolean recordTransaction(int userId, ArrayList<Integer> bookIds, double price, String type) {
+    public boolean recordTransaction(int userId, ArrayList<Integer> bookIds, BigDecimal DBprice, String type) {
         boolean success = false;
         
         String recordTransaction = """
@@ -244,7 +245,7 @@ public class DBClass {
             
             pstatment.setInt(1, userId);
             pstatment.setString(2, bookIdsToString);
-            pstatment.setDouble(3, price);
+            pstatment.setDouble(3, DBprice.doubleValue());
             pstatment.setString(4, type);
             
             pstatment.executeUpdate();

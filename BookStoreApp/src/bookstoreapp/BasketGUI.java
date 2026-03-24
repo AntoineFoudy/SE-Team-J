@@ -4,6 +4,7 @@
  */
 package bookstoreapp;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class BasketGUI extends javax.swing.JFrame {
     private int userId;
     private ArrayList<ArrayList<String>> basket;
     private ArrayList<Integer> bookIds;
-    private double price = 0;
+    BigDecimal BDprice;
     private boolean rentForSem = false;
 
     /**
@@ -31,10 +32,12 @@ public class BasketGUI extends javax.swing.JFrame {
     public BasketGUI(int userId) {
         initComponents();
         db = new DBClass();
+        this.BDprice = BigDecimal.ZERO;
         this.userId = userId;
         basket = new ArrayList<>();
         bookIds = new ArrayList<>();
         getBasketDetail();
+        
     }
 
     /**
@@ -156,7 +159,7 @@ public class BasketGUI extends javax.swing.JFrame {
     // Opens the PurchaseGUI and passes the correct info
     private void buy_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buy_bttnActionPerformed
         if(checkStock()) {
-            PurchaseGUI pgui = new PurchaseGUI(userId, price, bookIds);
+            PurchaseGUI pgui = new PurchaseGUI(userId, BDprice, bookIds);
             pgui.setVisible(true);
             setVisible(false);
         }
@@ -220,7 +223,7 @@ public class BasketGUI extends javax.swing.JFrame {
                     ", Type: " + b.get(6) +
                     ", Price: " + b.get(7));
             
-            this.price = price + Double.parseDouble(b.get(7));
+            this.BDprice = BDprice.add(new BigDecimal(b.get(7)));
             
             // Figures out if the basket can be rented for a semester
             if("normal".equals(b.get(6))) {
@@ -232,9 +235,9 @@ public class BasketGUI extends javax.swing.JFrame {
             
             // Adds the book id to a new ArrayList which will be past to the Purchase or Rent Class
             this.bookIds.add(Integer.valueOf(b.get(0)));
+            
         }
-        
-        price_txtField.setText(Double.toString(price));
+        price_txtField.setText(BDprice.toString());
         
         if(!typeNormal && typeSchool) {
             rentForSem = true;
