@@ -183,9 +183,14 @@ public class BasketGUI extends javax.swing.JFrame {
     // Opens the RentGUI and passes the correct info
     private void rentForSem_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rentForSem_bttnActionPerformed
         if(checkStock()) {
-            RentGUI rgui = new RentGUI(userId, bookIds, "Rent for Semester");
+            if(rentForSem) {
+                RentGUI rgui = new RentGUI(userId, bookIds, "Rent for Semester");
             rgui.setVisible(true);
             setVisible(false);
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "There are non school books in the basket");
+            }
         }
         else {
             JOptionPane.showMessageDialog(null, "Not enough stock available");

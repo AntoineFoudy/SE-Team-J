@@ -115,7 +115,7 @@ public class LoginGUI extends javax.swing.JFrame {
     // Login Method
     private void login_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_login_bttnActionPerformed
         try {
-            String email = email_txtField.getText();
+            String email = email_txtField.getText().toLowerCase();
             String password = password_txtField.getText();
             
             this.userId = db.loginUser(email, password);
@@ -138,7 +138,7 @@ public class LoginGUI extends javax.swing.JFrame {
     // Signup Method
     private void signup_bttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signup_bttnActionPerformed
         try{
-            String name = name_txtField.getText();
+            String name = name_txtField.getText().toLowerCase();
             String email = email_txtField.getText();
             String password = password_txtField.getText();
             
